@@ -6,7 +6,7 @@ namespace LeastRecentCache
 {
     public class MockDataProvider<TM,T> : IDataProvider<TM,T>
     {
-        private Dictionary<TM, T> _dataDict;
+        private readonly Dictionary<TM, T> _dataDict;
 
         public MockDataProvider(Dictionary<TM, T> dict )
         {

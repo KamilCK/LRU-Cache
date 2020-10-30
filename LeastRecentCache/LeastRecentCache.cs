@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace LeastRecentCache
 {
@@ -12,7 +11,7 @@ namespace LeastRecentCache
 
         private OrderPreservingDictionary<TM,T> _data = new OrderPreservingDictionary<TM, T>();
 
-        private static readonly object cacheLock = new object();
+        private static readonly object CacheLock = new object();
 
         private LeastRecentCache()
         {
@@ -25,7 +24,7 @@ namespace LeastRecentCache
             {
                 if (_instance == null)
                 {
-                    lock (cacheLock)
+                    lock (CacheLock)
                     {
                         _instance ??= new LeastRecentCache<TM, T>();
                     }
@@ -63,18 +62,18 @@ namespace LeastRecentCache
                     value = _dataProvider.GetData(request);
                     Log("Data retrieved from provider: " + request);
                     if (_data.ContainsKey(request))
-                        {
-                            _data.Remove(request);
-                        }
+                    {
+                        _data.Remove(request);
+                    }
 
-                        Log("Key inserted: " + request);
-                        _data.Add(request, value);
+                    Log("Key inserted: " + request);
+                    _data.Add(request, value);
 
-                        if (_data.Count > _size)
-                        {
-                            _data.RemoveFirst();
-                            Log("Capacity reached, key removed");
-                        }
+                    if (_data.Count > _size)
+                    {
+                        _data.RemoveFirst();
+                        Log("Capacity reached, key removed");
+                    }
 
                 }
                 return value;

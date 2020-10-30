@@ -7,7 +7,6 @@ namespace LRUCacheUnitTests
     [TestClass()]
     public class OrderPreservingDictionaryTests
     {
-
         object key1 = new object();
         object key2 = new object();
         object key3 = new object();

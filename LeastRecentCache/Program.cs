@@ -10,10 +10,6 @@ namespace LeastRecentCache
             var data = new Dictionary<int, int>() { { 1, 100 }, { 2, 200 }, { 3, 300 }, { 4, 400 } };
             MockDataProvider<int, int> provider = new MockDataProvider<int, int>(data);
 
-            //LeastRecentCache<int, int> cache = new LeastRecentCache<int, int>(provider, 2);
-            
-            Dictionary<string,int> blobl = new Dictionary<string, int>();
-
             int val;
             LeastRecentCache<int, int>.Instance.RegisterDataProvider(provider);
             LeastRecentCache<int, int>.Instance.ResizeCache(2);

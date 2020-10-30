@@ -46,38 +46,41 @@ namespace LeastRecentCache
 
         public T GetData(TM request)
         {
+            T value;
             lock (_data)
             {
-                if (_data.TryGetValue(request, out var value))
+                if (_data.TryGetValue(request, out value))
                 {
+                    Log("Data retrieved from cache: " + request);
                     if (!request.Equals(_data.GetLastKey()))
                     {
-                        Log("Data retrieved from cache: " + request);
-                            _data.Reinsert(request);
-                            Log("Key reinserted: " + request);
+                        _data.Reinsert(request);
+                        Log("Key reinserted: " + request);
                     }
+                    return value;
                 }
-                else
-                {
-                    value = _dataProvider.GetData(request);
-                    Log("Data retrieved from provider: " + request);
-                    if (_data.ContainsKey(request))
-                    {
-                        _data.Remove(request);
-                    }
-
-                    Log("Key inserted: " + request);
-                    _data.Add(request, value);
-
-                    if (_data.Count > _size)
-                    {
-                        _data.RemoveFirst();
-                        Log("Capacity reached, key removed");
-                    }
-
-                }
-                return value;
             }
+
+            value = _dataProvider.GetData(request);
+            lock (_data)
+            {
+                Log("Data retrieved from provider: " + request);
+                if (_data.ContainsKey(request))
+                {
+                    _data.Remove(request);
+                }
+
+                Log("Key inserted: " + request);
+                _data.Add(request, value);
+
+                if (_data.Count > _size)
+                {
+                    _data.RemoveFirst();
+                    Log("Capacity reached, key removed");
+                }
+
+                return value;
+            }   
 
         }
 

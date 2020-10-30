@@ -1,0 +1,12 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=229b2751_002D0c8f_002D4466_002Dbc41_002D2a72c58a1d9b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LRCacheTest #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::B176A68E-BFEC-40D2-84E6-6F81F653B341::.NETCoreApp,Version=v3.1::LeastRecentCache.UnitTests.LRCacheTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=924e2f2a_002D8928_002D432c_002D9b09_002D8693ae0a6145/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="LRCacheTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::E4D0A3B1-D410-4555-B51D-73995BCF63A7::.NETCoreApp,Version=v3.1::LeastRecentCache.Tests.OrderPreservingDictionaryTests.AddTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -86,26 +86,36 @@ namespace LeastRecentCache
 
         public List<TM> GetCacheKeys()
         {
-            return _data.GetKeys();
+            lock (_data)
+            {
+                return _data.GetKeys();
+            }
         }
         public void ClearCache()
         {
-            _data = new OrderPreservingDictionary<TM, T>();
+            lock (_data)
+            {
+                _data = new OrderPreservingDictionary<TM, T>();
+            }
         }
 
         public void ResizeCache(int size)
         {
-            _size = size;
-
-            while (_size < _data.Count)
+            lock (_data)
             {
-                _data.RemoveFirst();
+                _size = size;
+
+                while (_size < _data.Count)
+                {
+                    _data.RemoveFirst();
+                }
             }
         }
 
         public int GetCacheFill()
         {
             return _data.Count;
+            
         }
 
         private void Log(string message)

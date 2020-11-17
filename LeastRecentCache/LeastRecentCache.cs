@@ -1,47 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LeastRecentCache
 {
-    public class LeastRecentCache<TM,T> : ICache<TM,T>
+    public sealed class LeastRecentCache<TM,T> : CacheInitialise<TM, T>, ICache<TM, T>
     {
+        private int _size = 10;
         private static LeastRecentCache<TM,T> _instance;
-        private int _size=1;
         private IDataProvider<TM,T> _dataProvider;
         private ILogger _logger;
-
         private OrderPreservingDictionary<TM,T> _data = new OrderPreservingDictionary<TM, T>();
 
         private static readonly object CacheLock = new object();
 
-        private LeastRecentCache()
+        public LeastRecentCache(IDataProvider<TM, T> provider) : base(provider)
         {
-
-        }
-
-        public static LeastRecentCache<TM,T> Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    lock (CacheLock)
-                    {
-                        _instance ??= new LeastRecentCache<TM, T>();
-                    }
-                }
-                return _instance;
-            }
-        }
-
-        public void RegisterDataProvider(IDataProvider<TM, T> provider)
-        {
-            ClearCache();
             _dataProvider = provider;
         }
 
+        public LeastRecentCache(IDataProvider<TM, T> provider, ILogger logger) : base(provider, logger)
+        {
+            _dataProvider = provider;
+        }
+
+
         public void RegisterLogger(ILogger logger)
         {
-            _logger = logger;
+            //Requires a thread safe logger
+            lock (_logger)
+            {
+                _logger = logger;
+            }
         }
 
         public T GetData(TM request)
@@ -52,11 +41,8 @@ namespace LeastRecentCache
                 if (_data.TryGetValue(request, out value))
                 {
                     Log("Data retrieved from cache: " + request);
-                    if (!request.Equals(_data.GetLastKey()))
-                    {
-                        _data.Reinsert(request);
-                        Log("Key reinserted: " + request);
-                    }
+                    _data.Reinsert(request); 
+                    Log("Key reinserted: " + request);
                     return value;
                 }
             }
@@ -65,11 +51,7 @@ namespace LeastRecentCache
             lock (_data)
             {
                 Log("Data retrieved from provider: " + request);
-                if (_data.ContainsKey(request))
-                {
-                    _data.Remove(request);
-                }
-
+                _data.Remove(request); //in case another thread added it during retrieval
                 Log("Key inserted: " + request);
                 _data.Add(request, value);
 
@@ -103,7 +85,7 @@ namespace LeastRecentCache
         {
             lock (_data)
             {
-                _size = size;
+                _size = Math.Max(0,size);
 
                 while (_size < _data.Count)
                 {
@@ -114,8 +96,10 @@ namespace LeastRecentCache
 
         public int GetCacheFill()
         {
-            return _data.Count;
-            
+            lock (_data)
+            {
+                return _data.Count;
+            }
         }
 
         private void Log(string message)

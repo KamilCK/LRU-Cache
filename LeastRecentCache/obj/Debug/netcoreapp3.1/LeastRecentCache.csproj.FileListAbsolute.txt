@@ -25,3 +25,4 @@ C:\Users\krawc\source\repos\LRU-Cache\LeastRecentCache\obj\Debug\netcoreapp3.1\L
 C:\Users\krawc\source\repos\LRU-Cache\LeastRecentCache\obj\Debug\netcoreapp3.1\LeastRecentCache.dll
 C:\Users\krawc\source\repos\LRU-Cache\LeastRecentCache\obj\Debug\netcoreapp3.1\LeastRecentCache.pdb
 C:\Users\krawc\source\repos\LRU-Cache\LeastRecentCache\obj\Debug\netcoreapp3.1\LeastRecentCache.genruntimeconfig.cache
+C:\Users\krawc\source\repos\LRU-Cache\LeastRecentCache\obj\Debug\netcoreapp3.1\LeastRecentCache.csprojAssemblyReference.cache

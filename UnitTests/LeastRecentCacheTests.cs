@@ -24,22 +24,21 @@ namespace LRUCacheUnitTests
         [TestInitialize()]
         public void LRCache()
         {
-            _cache = LeastRecentCache<int, int>.Instance;
-            _cache.ResizeCache(size);
-            var data = new Dictionary<int, int>() {{key1, val1}, {key2, val2}, {key3, val3}, {key4, val4}};
+            var data = new Dictionary<int, int>() { { key1, val1 }, { key2, val2 }, { key3, val3 }, { key4, val4 } };
             _provider = new MockDataProvider<int, int>(data);
-            _cache.RegisterDataProvider(_provider);
+            _cache = new LeastRecentCache<int, int>(_provider);
+            _cache.ResizeCache(size);
         }
 
-        [TestMethod()]
-        public void SingletonTest()
-        {
-            var cache1 = LeastRecentCache<int, int>.Instance;
-            var cache2 = LeastRecentCache<float, int>.Instance;
-            Assert.AreSame(cache1, _cache);
-            Assert.AreNotSame(cache2, _cache);
-            Assert.AreEqual(_cache.GetType(), typeof(LeastRecentCache<int, int>));
-        }
+        //[TestMethod()]
+        //public void SingletonTest()
+        //{
+        //    var cache1 = LeastRecentCache<int, int>.Instance;
+        //    var cache2 = LeastRecentCache<float, int>.Instance;
+        //    Assert.AreSame(cache1, _cache);
+        //    Assert.AreNotSame(cache2, _cache);
+        //    Assert.AreEqual(_cache.GetType(), typeof(LeastRecentCache<int, int>));
+        //}
 
         [TestMethod()]
         public void GetDataTest()
@@ -87,23 +86,23 @@ namespace LRUCacheUnitTests
         [TestMethod]
         public void ElementDroppingTest()
         {
-            LeastRecentCache<int, int>.Instance.GetData(1);
-            LeastRecentCache<int, int>.Instance.GetData(2);
+            _cache.GetData(1);
+            _cache.GetData(2);
             List<int> expected1 = new List<int> {1, 2};
             CollectionAssert.AreEqual(expected1, _cache.GetCacheKeys());
 
-            LeastRecentCache<int, int>.Instance.GetData(2);
+            _cache.GetData(2);
             CollectionAssert.AreEqual(expected1, _cache.GetCacheKeys());
 
-            LeastRecentCache<int, int>.Instance.GetData(1);
+            _cache.GetData(1);
             List<int> expected2 = new List<int> {2, 1};
             CollectionAssert.AreEqual(expected2, _cache.GetCacheKeys());
 
-            LeastRecentCache<int, int>.Instance.GetData(3);
+            _cache.GetData(3);
             List<int> expected3 = new List<int> {1, 3};
             CollectionAssert.AreEqual(expected3, _cache.GetCacheKeys());
 
-            LeastRecentCache<int, int>.Instance.GetData(2);
+            _cache.GetData(2);
             List<int> expected4 = new List<int> {3, 2};
             CollectionAssert.AreEqual(expected4, _cache.GetCacheKeys());
         }
@@ -112,7 +111,7 @@ namespace LRUCacheUnitTests
         public void NonExistingKeyTest()
         {
 
-            int val = LeastRecentCache<int, int>.Instance.GetData(-1);
+            int val = _cache.GetData(-1);
             int expected = default;
 
             Assert.AreEqual(expected, val);

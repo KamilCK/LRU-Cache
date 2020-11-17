@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace LeastRecentCache
 {
-
+    /// <summary>
+    /// Minimum viable dictionary preserving element insertion order for the use of LRU Cache
+    /// </summary>
+    /// <typeparam name="TM"></typeparam>
+    /// <typeparam name="T"></typeparam>
     public class OrderPreservingDictionary<TM, T>
     {
+
         class DictEntry<K, V>
         {
             public readonly V Value;
@@ -45,6 +49,7 @@ namespace LeastRecentCache
         }
         public TM GetLastKey()
         {
+            //returns default for empty dictionary
             return _tail.PreviousEntry.Key;
         }
         public int Count => dict.Count;
@@ -66,8 +71,7 @@ namespace LeastRecentCache
         public List<TM> GetKeys()
         {
             var list = new List<TM>();
-            DictEntry<TM, T> entry = _head;
-            entry = entry.NextEntry;
+            DictEntry<TM, T> entry = _head.NextEntry;
             while (entry != _tail)
             {
                 list.Add(entry.Key);
@@ -84,6 +88,8 @@ namespace LeastRecentCache
 
         public void RemoveFirst()
         {
+            if (_head.NextEntry == _tail) return;
+
             DictEntry<TM, T> entry = _head.NextEntry;
             _head.NextEntry = entry.NextEntry;
             dict.Remove(entry.Key);
@@ -91,8 +97,8 @@ namespace LeastRecentCache
         }
         public void Remove(TM key)
         {
-            DictEntry<TM, T> entry = dict[key];
-
+            if (!dict.TryGetValue(key, out DictEntry<TM, T> entry)) return;
+            
             entry.PreviousEntry.NextEntry = entry.NextEntry;
             entry.NextEntry.PreviousEntry = entry.PreviousEntry;
 
@@ -101,7 +107,6 @@ namespace LeastRecentCache
         }
         public void Reinsert(TM key)
         {
-
             DictEntry<TM, T> entry = dict[key];
 
             entry.PreviousEntry.NextEntry = entry.NextEntry;
@@ -112,10 +117,6 @@ namespace LeastRecentCache
 
             _tail.PreviousEntry.NextEntry = entry;
             _tail.PreviousEntry = entry;
-
-
         }
     }
-
-
 }

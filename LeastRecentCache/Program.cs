@@ -10,16 +10,18 @@ namespace LeastRecentCache
             var data = new Dictionary<int, int>() { { 1, 100 }, { 2, 200 }, { 3, 300 }, { 4, 400 } };
             MockDataProvider<int, int> provider = new MockDataProvider<int, int>(data);
 
-            LeastRecentCache<int, int>.Instance.RegisterDataProvider(provider);
-            LeastRecentCache<int, int>.Instance.ResizeCache(2);
-            LeastRecentCache<int, int>.Instance.RegisterLogger(new MockLogger());
-            LeastRecentCache<int, int>.Instance.GetData(1);
-            LeastRecentCache<int, int>.Instance.GetData(2);
-            LeastRecentCache<int, int>.Instance.GetData(2);
-            LeastRecentCache<int, int>.Instance.GetData(1);
-            LeastRecentCache<int, int>.Instance.GetData(3);
-            LeastRecentCache<int, int>.Instance.GetData(5);
-            LeastRecentCache<int, int>.Instance.GetData(2);
+            var cache = new LeastRecentCache<int, int>(provider);
+
+            //LeastRecentCache<int, int>.Instance.RegisterDataProvider(provider);
+            cache.ResizeCache(2);
+            cache.RegisterLogger(new MockLogger());
+            cache.GetData(1);
+            cache.GetData(2);
+            cache.GetData(2);
+            cache.GetData(1);
+            cache.GetData(3);
+            cache.GetData(5);
+            cache.GetData(2);
 
         }
     }

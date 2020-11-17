@@ -24,7 +24,7 @@ namespace LRUCacheUnitTests
             dict.Add(key3, val3);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void AddTest()
         {
             //Adding items performed in intialiser as it is necessary set up for all subsequent tests
@@ -34,20 +34,20 @@ namespace LRUCacheUnitTests
         }
 
 
-        [TestMethod()]
+        [TestMethod]
         public void ContainsKeyTest()
         {
             Assert.AreEqual(true, dict.ContainsKey(key1));
             Assert.AreEqual(false, dict.ContainsKey(key4));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void GetLastKeyTest()
         {
             Assert.AreEqual(key3,dict.GetLastKey());
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void TryGetValueTest()
         {
             
@@ -58,7 +58,7 @@ namespace LRUCacheUnitTests
             Assert.AreEqual(0, testVal3); //returns default int
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void GetKeysTest()
         {
             var keyList = dict.GetKeys();
@@ -68,14 +68,14 @@ namespace LRUCacheUnitTests
 
 
 
-        [TestMethod()]
+        [TestMethod]
         public void RemoveFirstTest()
         {
             dict.RemoveFirst();
             Assert.AreEqual(false, dict.ContainsKey(key1));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void RemoveTest()
         {
             dict.Remove(key2);
@@ -85,7 +85,7 @@ namespace LRUCacheUnitTests
             CollectionAssert.AreEqual(new List<object> { key1, key3 }, keyList);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void ReinsertTest()
         {
             dict.Reinsert(key2);
@@ -93,6 +93,25 @@ namespace LRUCacheUnitTests
             var keyList = dict.GetKeys();
 
             CollectionAssert.AreEqual(new List<object> { key1, key3,key2 }, keyList);
+        }
+
+        [TestMethod]
+        public void RemoveMissingValue()
+        {
+            dict.Remove(new object());
+            var keyList = dict.GetKeys();
+
+            CollectionAssert.AreEqual(new List<object> { key1, key2, key3 }, keyList);
+        }
+
+        [TestMethod]
+        public void RemoveFirstEmptyList()
+        {
+            OrderPreservingDictionary<object, int> dictEmpty = new OrderPreservingDictionary<object, int>();
+            dictEmpty.RemoveFirst();
+            var keyList = dictEmpty.GetKeys();
+
+            CollectionAssert.AreEqual(new List<object> { }, keyList);
         }
     }
 }
